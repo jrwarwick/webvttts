@@ -53,7 +53,7 @@ current_sentence_text  = ""
 current_sentence_duration = timedelta()
 since_t0 = timedelta()
 print(str(since_t0)+"\n____\n")
-for caption in webvtt.read('captions.vtt'):
+for caption in webvtt.read(vtt_filename):
     start_stamp = datetime.strptime(caption.start, "%H:%M:%S.%f")
     end_stamp   = datetime.strptime(caption.end, "%H:%M:%S.%f")
     delta_t = end_stamp - start_stamp
