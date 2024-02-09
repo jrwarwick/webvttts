@@ -4,8 +4,9 @@
 #replacement with this.
 #might want to first:
 """
-apt-get install vim.tiny ffmpeg sox openssh-client #git?
-pip install webvtt ssml-builder
+apt-get -y install vim.tiny ffmpeg sox openssh-client git
+pip install --upgrade pip
+pip install webvtt-py ssml-builder
 git clone https://github.com/jrwarwick/webvttts.git
 #or curl -LO the webvttts.py script and vtt source
 """
@@ -13,10 +14,10 @@ git clone https://github.com/jrwarwick/webvttts.git
 import webvtt
 from datetime import datetime, timedelta
 import re
+import sys
 import subprocess
 #going to need ffmpeg anyway, so might not need this
 import soundfile 
-
 
 
 def process_sentence(text,duration,index):
@@ -46,6 +47,7 @@ def process_sentence(text,duration,index):
 
 # parse vtt, and generate time line that includes interval durations.
 # as we go, also split and splice to create a list of sentences, with prorated durations.
+vtt_filename = sys.argv[1] if len(sys.argv) > 1 else 'captions.vtt'
 current_sentence_index = 0
 current_sentence_text  = ""
 current_sentence_duration = timedelta()
