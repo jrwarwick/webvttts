@@ -29,10 +29,17 @@ def process_sentence(mode, text, duration, index):
     #get the first three and last two words of sentence for a name
     words = re.sub('[^a-z]','', text.strip().split(' ')[0].lower() )
     speech = Speech()
+    speech.sub(value="CalGEM", alias="Cal gem") #TODO: find substitution notes in the vtt and/or in config files
     filename_base = str(index)+"_sentence_"+words
     with open(filename_base+".txt", 'w') as textf:
-        if mode = "ssml":
-            speech.add_text(text)
+        if mode == "ssml":
+            if " does " in text:
+                [before,after] = text.split(" does ", 1)
+                speech.add_text(before)
+                speech.emphasis(" does ", "strong")
+                speech.add_text(after)
+            else:
+                speech.add_text(text)
             textf.write(speech.speak()+"\n")
         else:
             textf.write(text+"\n")
@@ -48,8 +55,9 @@ def process_sentence(mode, text, duration, index):
     print('seconds = {}'.format(sndf.frames / sndf.samplerate))
     actual_duration = timedelta(seconds=sndf.frames / sndf.samplerate)
     mismatch = duration - actual_duration
+    print("\t\t\trendered duration: "+str(actual_duration))
     print("\t\t\trendered duration mismatch: "+str(mismatch))
-    #TODO: append silence of that amount.
+    #TODO: append silence of that amount, if positive. Try a prosody adjustment and reprocess if too long.
 
 
 # parse vtt, and generate time line that includes interval durations.
