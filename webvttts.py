@@ -18,17 +18,24 @@ import sys
 import subprocess
 #going to need ffmpeg anyway, so might not need this
 import soundfile 
+from ssml_builder.core import Speech
 
+speech = Speech()
 
-def process_sentence(text,duration,index):
+def process_sentence(mode, text, duration, index):
     #save off the text for possible rerender
     #attempt the render
     #check for duration, and attempt adjustment if it doesn't match.
     #get the first three and last two words of sentence for a name
     words = re.sub('[^a-z]','', text.strip().split(' ')[0].lower() )
+    speech = Speech()
     filename_base = str(index)+"_sentence_"+words
     with open(filename_base+".txt", 'w') as textf:
-        textf.write(text+"\n")
+        if mode = "ssml":
+            speech.add_text(text)
+            textf.write(speech.speak()+"\n")
+        else:
+            textf.write(text+"\n")
     outfile_path ="/tmp/"+filename_base+".wav"
     #254 360
     subprocess.run(["/usr/local/bin/tts", "--text", text, "--model_name", "tts_models/en/vctk/vits", "--speaker_idx", "p360", "--out_path", outfile_path])
@@ -64,7 +71,7 @@ for caption in webvtt.read(vtt_filename):
     print("\t"+clean_caption)
     sentence_conclusion = re.search('[.!?]+',clean_caption)
     if sentence_conclusion:
-        print("<sentence split!>"+str(sentence_conclusion.end()))
+        print("--sentence split!--"+str(sentence_conclusion.end()))
         current_sentence_text += " " + clean_caption[0:sentence_conclusion.end()]
         if len(clean_caption) > sentence_conclusion.end():
             print("  sentence fragment to deal with !! ")
@@ -74,7 +81,8 @@ for caption in webvtt.read(vtt_filename):
             current_sentence_duration += delta_t
         print("\t\t finished sentence: " + current_sentence_text)
         print("\t\t   duration: " + str(current_sentence_duration))
-        process_sentence(current_sentence_text, current_sentence_duration, current_sentence_index) 
+        #TODO: eventually just stopping at plaintext should be an option, and parameterized.
+        process_sentence("ssml", current_sentence_text, current_sentence_duration, current_sentence_index)
         #reset
         current_sentence_text = ""
         current_sentence_duration = timedelta()
