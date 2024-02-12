@@ -27,10 +27,10 @@ def process_sentence(mode, text, duration, index):
     #attempt the render
     #check for duration, and attempt adjustment if it doesn't match.
     #get the first three and last two words of sentence for a name
-    words = re.sub('[^a-z]','', text.strip().split(' ')[0].lower() )
+    words = re.sub('[^a-z ]','', text.strip().lower()).split(' ')[0:2]
     speech = Speech()
     speech.sub(value="CalGEM", alias="Cal gem") #TODO: find substitution notes in the vtt and/or in config files
-    filename_base = str(index)+"_sentence_"+words
+    filename_base = str(index)+"_sentence_"+"_".join(words)
     with open(filename_base+".txt", 'w') as textf:
         if mode == "ssml":
             if " does " in text:
