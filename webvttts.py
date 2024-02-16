@@ -39,7 +39,7 @@ def process_sentence(mode, text, duration, index):
                 speech.emphasis(" does ", "strong")
                 speech.add_text(after)
             else:
-                speech.add_text(text)
+                speech.prosody(value=text,rate="110%")
             textf.write(speech.speak()+"\n")
         else:
             textf.write(text+"\n")
@@ -55,6 +55,7 @@ def process_sentence(mode, text, duration, index):
     print('seconds = {}'.format(sndf.frames / sndf.samplerate))
     actual_duration = timedelta(seconds=sndf.frames / sndf.samplerate)
     mismatch = duration - actual_duration
+    print("\t\t\texpected duration: "+str(duration))
     print("\t\t\trendered duration: "+str(actual_duration))
     print("\t\t\trendered duration mismatch: "+str(mismatch))
     #TODO: append silence of that amount, if positive. Try a prosody adjustment and reprocess if too long.
@@ -103,7 +104,7 @@ for caption in webvtt.read(vtt_filename):
 # merge and/or break the caption/segemnts up into sentences, accumulating the deltas into a sentence duration. Attempt to roughly prorate the durations when sentence ends mid segment.
 # now feed each sentence through a TTS engine. After generation, check the length; it might need silence insertion or it might need trimming or speed-up (SSML? SOX no-pitch-bend-speedup?)
 
-#outside the loop, attempt to merge/concat all the audio files together. Hopefully ready for insertion directly into video editor!
-#probably attempt a transcode to m4a (ffmpeg)
+#outside the primary loop, attempt to merge/concat all the rendered audio files together. Hopefully ready for insertion directly into video editor!
+#probably attempt a transcode to m4a (ffmpeg); also an option per segment:    -filter:a "atempo=1.7"
 
 # later/eventually: try and add some SSML support in, somehow.
