@@ -19,9 +19,9 @@ Therefore, you will probably want to go through the vtt file and hand edit it a 
 
 
 ## Quickstart 
-from within the coqui docker image:
+from within the coqui docker image (or of course you could mash this into a new Dockerfile):
 ```
-apt-get update ; pt-get install coreutils vim.tiny ffmpeg sox openssh-client git
+apt-get update ; apt-get -y install coreutils vim.tiny ffmpeg sox openssh-client git
 pip install --upgrade pip ; pip install webvtt-py ssml-builder
 git clone https://github.com/jrwarwick/webvttts.git
 cd webvttts/ ; ls
