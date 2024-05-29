@@ -39,11 +39,13 @@ pr --double-space --omit-header all_sentences.txt | fmt --width=85 > readable_sc
 
 
 ## TODO:
+ - simple method(s) of indicating and handling a pause. Once encountered the loop can just generate a sequentially numbered wave file with silence in it then skip the rest of the loop.
  - generate a demo vtt file and include it.
  - include some kind of test framework test case file. Probably "PyUnit" aka unittest since it is built in.
  - ellipsis handling/ignoring.
  - get some salt and PEP8 on this thing.
  - maybe start looking into recognizing where/when/what prosody modulations are appropriate, and put them into sentence processing method.
+ - rhasspy piper is pretty great, and currently maintained. Maybe it is time for a compare-and-contrast duel between the two. 
  - proper real "python oop"?
  - it kind of looks like coqui never got around to actual SSML prosody support. So maybe need think about that a bit, explore some options.
  - at some point it might be kind of cool to have the option of attempting to extract/generate the VTT file from a local on-disk video file in the first place. No idea how hard or work intensive that might be. It may be worth it to provide a "local-by-default" option but also include a TTS-as-a-service option.
